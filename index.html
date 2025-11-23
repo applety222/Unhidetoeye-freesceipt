@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QP RIVALS HUB UNLOCKER</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+    body {margin:0;background:linear-gradient(135deg,#000,#1a0000);font-family:'Orbitron',sans-serif;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh;text-transform:uppercase;letter-spacing:1px;}
+    .box {background:rgba(0,0,0,0.8);border:2px solid #ff0040;border-radius:20px;padding:50px;max-width:500px;width:100%;box-shadow:0 0 50px rgba(255,0,64,0.5);text-align:center;position:relative;overflow:hidden;}
+    .box::before {content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,0,64,0.1),transparent);animation:shine 3s infinite;}
+    @keyframes shine {0%{transform:translateX(-100%) translateY(-100%) rotate(45deg);}100%{transform:translateX(100%) translateY(100%) rotate(45deg);}}
+    h1 {font-size:28px;margin:0 0 10px;color:#ff0040;font-weight:900;letter-spacing:3px;}
+    .desc {color:#ff6666;font-size:14px;margin-bottom:30px;letter-spacing:1px;}
+    .step-box {background:rgba(255,0,64,0.1);border:1px solid #ff0040;border-radius:15px;padding:30px;margin:20px 0;}
+    canvas {background:#000;border-radius:10px;margin:15px 0;box-shadow:0 0 20px rgba(255,0,64,0.3);}
+    input[type=text], input[type=password] {width:100%;padding:15px;font-size:18px;text-align:center;background:#111;color:#fff;border:1px solid #ff0040;border-radius:8px;margin:8px 0;letter-spacing:2px;text-transform:uppercase;box-sizing:border-box;}
+    button {width:100%;padding:15px;margin:10px 0;font-size:18px;font-weight:700;border:none;border-radius:10px;cursor:pointer;letter-spacing:1px;transition: all 0.3s;}
+    .btn-verify {background:#333;color:#ff6666;}
+    .btn-verify.active {background:#ff0040;color:#fff;box-shadow:0 0 15px rgba(255,0,64,0.5);}
+    .subscribe-btn {background:#ff0040 !important;color:#fff !important;font-size:20px !important;padding:18px !important;box-shadow:0 0 15px rgba(255,0,64,0.5);}
+    .confirm-btn {background:#ff6666;color:#000;margin-top:15px;}
+    .timer-area {margin:30px 0;font-size:60px;font-weight:900;color:#ff0040;display:none;letter-spacing:3px;}
+    .progress {height:10px;background:#333;border-radius:5px;overflow:hidden;margin:20px 0;}
+    .bar {height:100%;width:0;background:#ff0040;transition:width 0.3s;box-shadow:0 0 10px #ff0040;}
+    .final {margin-top:30px;font-size:20px;display:none;}
+    .final pre {background:#111;padding:25px;border-radius:10px;overflow-x:auto;color:#ff0040;font-family:monospace;font-size:14px;word-break:break-all;border:1px solid #ff0040;}
+    .key-display {font-size:24px;font-weight:900;color:#ff0040;margin:15px 0;}
+    .copy-btn {background:#ff0040;color:#fff;margin-top:15px;box-shadow:0 0 15px rgba(255,0,64,0.5);}
+    .refresh {color:#ff6666;font-size:14px;cursor:pointer;margin-top:10px;}
+    .login-box {background:rgba(255,0,64,0.1);border:1px solid #ff0040;border-radius:15px;padding:30px;margin:20px 0;}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>QP RIVALS HUB</h1>
+    <p class="desc">Destroying Cheaters 2025 | Unlock Auto Farm, Skin Changer, Wall Bang</p>
+
+    <!-- 0단계: 로그인 -->
+    <div id="login-step">
+      <div class="login-box">
+        <p style="font-size:18px;margin:15px 0;">ENTER KEY TO ACCESS (UPPERCASE ONLY)</p>
+        <input type="text" id="username" placeholder="USERNAME" autocomplete="off">
+        <input type="password" id="password" placeholder="PASSWORD" autocomplete="off">
+        <button class="btn-verify active" id="login-btn">ACCESS HUB</button>
+        <p id="login-msg" style="margin:10px 0;color:#ff6666;height:20px;font-weight:700;"></p>
+      </div>
+    </div>
+
+    <!-- 1단계: 캡챠 -->
+    <div id="captcha-step" style="display:none;">
+      <div class="step-box">
+        <canvas id="captcha" width="280" height="100"></canvas>
+        <div class="refresh" onclick="generateCaptcha()">REFRESH CAPTCHA</div>
+        <input type="text" id="captcha-input" placeholder="ENTER CODE" autocomplete="off">
+        <button class="btn-verify" id="verify-btn">VERIFY</button>
+        <p id="msg" style="margin:10px 0;color:#ff6666;height:20px;font-weight:700;"></p>
+      </div>
+    </div>
+
+    <!-- 2단계: 유튜브 구독 -->
+    <div class="step-box" id="subscribe-step" style="display:none;">
+      <p style="font-size:18px;margin:15px 0;">SUBSCRIBE FOR PREMIUM ACCESS</p>
+      <button class="subscribe-btn" id="youtube-btn">JOIN YOUTUBE CHANNEL</button>
+      <button class="confirm-btn" id="confirm-btn">SUBSCRIBED! CONTINUE</button>
+    </div>
+
+    <!-- 3단계: 타이머 -->
+    <div id="timer-area">
+      <div class="timer-area" id="timer">10</div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <button id="getlink-btn" disabled>UNLOCKING HUB... (10s)</button>
+    </div>
+
+    <!-- 4단계: 최종 화면 -->
+    <div class="final" id="final">
+      <p>ACCESS GRANTED! USE THIS KEY & SCRIPT</p>
+      <div class="key-display" id="generated-key">QP-ABCD-1234</div>
+      <pre id="script-code">loadstring(game:HttpGet'https://raw.githubusercontent.com/ScriptsQP/RivalsHub/main/loader.lua')()</pre>
+      <button class="copy-btn" onclick="copyScript()">COPY SCRIPT + KEY</button>
+      <p style="margin-top:15px;color:#ff6666;font-size:12px;" id="copy-status"></p>
+    </div>
+  </div>
+
+<script>
+  const VALID_USERNAME = "RIVALS";
+  const VALID_PASSWORD = "DESTROY2025";
+
+  // 입력 대문자 강제
+  ['username', 'password', 'captcha-input'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function() { this.value = this.value.toUpperCase(); });
+  });
+
+  // 로그인
+  document.getElementById('login-btn').onclick = () => {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value;
+    if (user === VALID_USERNAME && pass === VALID_PASSWORD) {
+      document.getElementById('login-msg').style.color = '#ff0040';
+      document.getElementById('login-msg').textContent = 'ACCESS GRANTED';
+      setTimeout(() => {
+        document.getElementById('login-step').style.display = 'none';
+        document.getElementById('captcha-step').style.display = 'block';
+      }, 1000);
+    } else {
+      document.getElementById('login-msg').textContent = 'INVALID CREDENTIALS';
+    }
+  };
+  document.getElementById('password').addEventListener('keyup', e => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
+
+  // 캡챠
+  const canvas = document.getElementById('captcha');
+  const ctx = canvas.getContext('2d');
+  let captchaText = '';
+  function generateCaptcha() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    captchaText = '';
+    for (let i = 0; i < 6; i++) captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
+    ctx.fillStyle = '#000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    for (let i = 0; i < 15; i++) {
+      ctx.strokeStyle = `rgba(255,0,64,0.2)`; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(Math.random()*canvas.width, Math.random()*canvas.height);
+      ctx.lineTo(Math.random()*canvas.width, Math.random()*canvas.height); ctx.stroke();
+    }
+    for (let i = 0; i < 6; i++) {
+      ctx.font = `${Math.random()*15+30}px Orbitron`;
+      ctx.fillStyle = `hsl(${i*60}, 100%, 50%)`;
+      ctx.save(); ctx.translate(20 + i*40, 60); ctx.rotate((Math.random()-0.5)*0.3);
+      ctx.fillText(captchaText[i], 0, 0); ctx.restore();
+    }
+  }
+  generateCaptcha();
+
+  document.getElementById('verify-btn').onclick = () => {
+    if (document.getElementById('captcha-input').value === captchaText) {
+      document.getElementById('msg').style.color = '#ff0040';
+      document.getElementById('msg').textContent = 'VERIFIED';
+      setTimeout(() => {
+        document.getElementById('captcha-step').style.display = 'none';
+        document.getElementById('subscribe-step').style.display = 'block';
+      }, 800);
+    } else {
+      document.getElementById('msg').textContent = 'INCORRECT! RETRY';
+      generateCaptcha(); document.getElementById('captcha-input').value = '';
+    }
+  };
+  document.getElementById('captcha-input').addEventListener('keyup', e => { if (e.key === 'Enter') document.getElementById('verify-btn').click(); });
+
+  // 유튜브 구독
+  document.getElementById('youtube-btn').onclick = () => window.open('https://www.youtube.com/@ScriptsQP', '_blank');
+  document.getElementById('confirm-btn').onclick = () => {
+    document.getElementById('subscribe-step').style.display = 'none';
+    document.getElementById('timer-area').style.display = 'block';
+    startTimer();
+  };
+
+  // 10초 타이머 + 완료 후 자동 이동
+  function startTimer() {
+    let sec = 10;
+    const timerEl = document.getElementById('timer');
+    const bar = document.getElementById('bar');
+    const btn = document.getElementById('getlink-btn');
+    const iv = setInterval(() => {
+      sec--;
+      timerEl.textContent = sec;
+      bar.style.width = ((10-sec)/10*100) + '%';
+      btn.textContent = `UNLOCKING... (${sec}s)`;
+      if (sec <= 0) {
+        clearInterval(iv);
+        document.getElementById('timer-area').style.display = 'none';
+        generateKey();
+        document.getElementById('final').style.display = 'block';
+
+        // ★ 여기서 자동으로 원하는 페이지로 이동 ★
+        setTimeout(() => {
+          window.location.href = 'https://applety222.github.io/GETscript/';
+        }, 1800); // 1.8초 정도 키 보여준 후 이동 (원하시면 0으로 바꾸면 바로 이동)
+      }
+    }, 1000);
+  }
+
+  // 키 생성
+  function generateKey() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let key = 'QP-';
+    for (let i = 0; i < 4; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
+    key += '-';
+    for (let i = 0; i < 4; i++) key += chars.charAt(Math.floor(Math.random() * chars.length));
+    document.getElementById('generated-key').textContent = key;
+  }
+
+  // 복사 기능
+  function copyScript() {
+    const key = document.getElementById('generated-key').textContent;
+    const code = document.getElementById('script-code').textContent + '\n-- Key: ' + key;
+    navigator.clipboard.writeText(code).then(() => {
+      document.getElementById('copy-status').textContent = 'COPIED TO CLIPBOARD!';
+      set timeouts(() => document.getElementById('copy-status').textContent = '', 3000);
+    }).catch(() => document.getElementById('copy-status').textContent = 'COPY FAILED');
+  }
+</script>
+</body>
+</html>
